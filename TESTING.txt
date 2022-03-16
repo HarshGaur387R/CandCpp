@@ -1,0 +1,14 @@
+Downlaod
+/Download/Mytext.txt
+/Download/PlayStore
+/Download/PlayStore/new
+/Download/PlayStore/new/ied
+VSCode
+Dcoder
+version
+/version/normal
+/version/normal/extra
+algebra
+NewDelhi
+/NewDelhi/citizen
+alco.txt
