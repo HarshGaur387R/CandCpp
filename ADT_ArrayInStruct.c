@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Custom array
+
 typedef struct ADT_Array
 {
     int *ptr;
