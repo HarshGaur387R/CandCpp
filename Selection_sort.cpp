@@ -18,7 +18,7 @@ void sort::selectionSort(int arr[], int n)
     int flow = 0;
     bool isSwap = false;
 
-    for (int i = 1 + flow; i < n; i++)
+    for (int i = 1 + flow; i < n-1; i++)
     {
         minValue = arr[flow];
         minIndex = flow;
@@ -51,7 +51,7 @@ sort::~sort()
 
 int main()
 {
-    int arr[] = {8, 20, 0, 40, 0, 0};
+    int arr[] = {1, -2, -1, 2, 0};
 
     sort ob;
     ob.selectionSort(arr, sizeof(arr) / sizeof(arr[0]));
