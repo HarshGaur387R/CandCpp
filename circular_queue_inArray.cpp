@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+#include <iomanip>
 using namespace std;
 
 class cqueue
@@ -160,7 +162,7 @@ void cqueue::print()
 int main()
 {
 
-    cqueue ob(6);
+   /* cqueue ob(6);
     ob.enqeue(430);
     ob.enqeue(3);
     ob.enqeue(40);
@@ -184,6 +186,6 @@ int main()
     cout << ob.deqeue() << endl;
     cout << ob.deqeue() << endl;
     cout << ob.deqeue() << endl;
-
+*/
     return 0;
 }
