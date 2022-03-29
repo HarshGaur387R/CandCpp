@@ -1,63 +1,75 @@
 #include <iostream>
 using namespace std;
 
-void merge(int arr[], int l, int h, int m)
+void merge(int arr[], int l, int m, int h)
 {
+    int s = h-l+1;
+    int arr2[s];
 
-    int arr2[h + 1];
     int i, j, k;
-    i = j = k = 0;
+    i = l;
+    j = m + 1;
+    k = l;
 
-    while (i < m && j < h)
+    while (i <= m && j <= h)
     {
-        if (arr[i] > arr[j])
+        if (arr[i] < arr[j])
         {
             arr2[k] = arr[i];
+            k++;
             i++;
         }
         else
         {
             arr2[k] = arr[j];
+            k++;
             j++;
         }
     }
-    while (i < m)
+    while (i <= m)
     {
         arr2[k] = arr[i];
         k++;
         i++;
     }
-    while (j < h)
+    while (j <= h)
     {
         arr2[k] = arr[j];
         k++;
         j++;
     }
 
+    for (int p = l; p <= h; p++)
+    {
+        arr[p] = arr2[p];
+    }
 }
 
-void mergesort(int arr[], int low, int high)
+void mergeSort(int arr[], int low, int high)
 {
-   
-
+    int mid;
     if (low < high)
     {
 
-        int mid = (low + high) / 2;
-        mergesort(arr, low, mid);
-        mergesort(arr, mid + 1, high);
-
+        mid = (low + high) / 2;
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid + 1, high);
         merge(arr, low, mid, high);
     }
-
 }
 
 int main()
 {
 
-    int arr[] = {3,2,1,5};
+    int n = 4;
+    int arr[] = {3, 2, 1, 1};
 
-    mergesort(arr,0,4-1);
+    mergeSort(arr, 0, n-1);
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
 
     return 0;
 }
