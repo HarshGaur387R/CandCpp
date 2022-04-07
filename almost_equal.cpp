@@ -18,19 +18,32 @@ public:
     {
 
         int arr[257] = {0};
-        int count = 0;
+        int count = 0, i = 0;
 
-        
-        for (int i = 0; i < s1.length(); i++)
+        string temp1, temp2;
+
+        if (s1.length() > s2.length())
         {
-            int char_to_int = s1.at(i);
-            arr[char_to_int]++;
+            temp1 = s1;
+            temp2 = s2;
+        }
+        else if (s1.length() <= s2.length())
+        {
+            temp2 = s1;
+            temp1 = s2;
         }
 
-        for (int i = 0; i < s2.length(); i++)
+        while (temp1.length() > i)
         {
-            int char_to_int = s2.at(i);
-            arr[char_to_int]--;
+            int char_to_int = temp1.at(i);
+            arr[char_to_int]++;
+
+            if (i < temp2.length())
+            {
+                char_to_int = temp2.at(i);
+                arr[char_to_int]--;
+            }
+            i++;
         }
 
         for (int j = 0; j <= 257; j++)
