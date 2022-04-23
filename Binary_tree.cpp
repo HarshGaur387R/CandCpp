@@ -12,11 +12,40 @@ public:
     static void inOrderTraversal(Node *root);
     static bool isBST(Node *root);
     static Node *search(Node *root, int key);
+    static Node *iterativeSearch(Node *root, int key);
     Node *left = NULL;
     Node *right = NULL;
     Node();
     ~Node();
 };
+
+Node *Node ::iterativeSearch(Node *root, int key)
+{
+
+    Node *temp = root;
+
+    if (root->data == key)
+    {
+        return root;
+    }
+
+    while (temp)
+    {
+        if (temp->data == key)
+        {
+            return temp;
+        }
+        else if (temp->data > key)
+        {
+            temp = temp->left;
+        }
+        else if (temp->data < key)
+        {
+            temp = temp->right;
+        }
+    }
+    return NULL;
+}
 
 Node *Node ::search(Node *root, int key)
 {
@@ -145,6 +174,11 @@ int main()
     p2->left = p4;
     p2->right = p5;
 
+    Node *grt = Node::iterativeSearch(p1,1);
+
+    cout << p4 << endl;
+    cout << grt << endl;
+
     // Node::preorderTraversal(p1);
     // Node::postorderTraversal(p1);
     // Node::inOrderTraversal(p1);
@@ -157,11 +191,6 @@ int main()
     {
         cout << "No\n";
     }*/
-
-    Node *grt = Node::search(p1, 4);
-
-    cout << p5 << endl;
-    cout << grt << endl;
 
     delete grt;
     delete p1;
