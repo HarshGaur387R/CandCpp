@@ -1,47 +1,21 @@
 #include <iostream>
 
+#include <vector>
+
 using namespace std;
-
-
-
-int x;
-
-void Q(int z)
-
-{
-
-    z += x;
-
-    cout << z <<" ";
-
-}
-
-void P(int *y)
-
-{
-
-    int x = *y + 2;
-
-    Q(x);
-
-    *y = x - 1;
-
-    cout << x << " ";
-
-}
 
 int main()
 
 {
 
-    x = 5;
+    vector<int> vec = {2, 2, 2, 5, 5, 6, 6, 7, 7, 8};
 
-    P(&x);
+    vector<int>::iterator lo;
 
-    cout << x;
+    lo = lower_bound(vec.begin(), vec.end(), 4);
 
+    cout << (lo - vec.begin()) << " " << *lo;
     
 
     return 0;
-
-} 
+}
