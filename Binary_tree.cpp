@@ -10,14 +10,49 @@ public:
     static void preorderTraversal(Node *root);
     static void postorderTraversal(Node *root);
     static void inOrderTraversal(Node *root);
-    static bool isBST(Node *root);
+    static bool isBST(Node *root); //Checkinig if binary tree is BST
     static Node *search(Node *root, int key);
     static Node *iterativeSearch(Node *root, int key);
+    void insert(int key); // BST insertion
     Node *left = NULL;
     Node *right = NULL;
     Node();
     ~Node();
 };
+
+void Node ::insert(int key)
+{
+    Node *root = this;
+    Node *perv = NULL;
+
+    while (root)
+    {
+        perv = root;
+
+        if (root->data == key)
+        {
+            cout << key << " : already exist in BST" << endl;
+            return;
+        }
+        else if (root->data > key)
+        {
+            root = root->left;
+        }
+        else if (root->data < key)
+        {
+            root = root->right;
+        }
+    }
+
+    if (perv->data > key)
+    {
+        perv->left = Node::createNode(key);
+    }
+    else if (perv->data < key)
+    {
+        perv->right = Node::createNode(key);
+    }
+}
 
 Node *Node ::iterativeSearch(Node *root, int key)
 {
@@ -174,23 +209,19 @@ int main()
     p2->left = p4;
     p2->right = p5;
 
-    Node *grt = Node::iterativeSearch(p1,1);
+    Node *grt = Node::iterativeSearch(p1, 1);
 
-    cout << p4 << endl;
-    cout << grt << endl;
+    // cout << p4 << endl;
+    // cout << grt << endl;
+    
+    p1->insert(12);
+    p1->insert(7);
+    p1->insert(8);
+    p1->insert(0);
 
-    // Node::preorderTraversal(p1);
-    // Node::postorderTraversal(p1);
-    // Node::inOrderTraversal(p1);
 
-    /*if (Node::isBST(p1) == true)
-    {
-        cout << "Yes\n";
-    }
-    else
-    {
-        cout << "No\n";
-    }*/
+    Node::inOrderTraversal(p1);
+
 
     delete grt;
     delete p1;
