@@ -46,7 +46,7 @@ void countSort(int arr[], int n)
     int j = 0;
     int i = 0;
 
-    while (i <= n)
+    while (i <= max)
     {
         if (countArr[i] > 0)
         {
@@ -74,7 +74,7 @@ void countSort(int arr[], int n)
 int main()
 {
     int n = 5;
-    int arr[] = {5, 4, 3, 2, 2};
+    int arr[] = {5, 4, 300, 2, 2};
 
     countSort(arr, n);
 
