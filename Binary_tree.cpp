@@ -283,7 +283,7 @@ int main()
     p1->inOrderTraversal(p1);
     cout << endl;
 
-    p1->deleteNode(50, p1);
+    p1->deleteNode(5, p1);
     p1->inOrderTraversal(p1);
     cout << endl;
 
