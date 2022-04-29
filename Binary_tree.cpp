@@ -4,27 +4,92 @@ using namespace std;
 class Node
 {
 private:
-public:
     int data = 0;
-    static Node *createNode(int data);
-    static void preorderTraversal(Node *root);
-    static void postorderTraversal(Node *root);
-    static void inOrderTraversal(Node *root);
-    static bool isBST(Node *root); //Checkinig if binary tree is BST
+
+public:
+    Node *createNode(int data);
+
+    void preorderTraversal(Node *root);
+    void postorderTraversal(Node *root);
+    void inOrderTraversal(Node *root);
+
+    bool isBST(Node *root); // Checkinig if binary tree is BST
     static Node *search(Node *root, int key);
     static Node *iterativeSearch(Node *root, int key);
     void insert(int key); // BST insertion
+    Node *deleteNode(int key, Node *root);
+    Node *inorderPredecessor(Node *root);
     Node *left = NULL;
     Node *right = NULL;
-    Node();
+    Node(int key);
     ~Node();
 };
+
+Node *Node ::inorderPredecessor(Node *root1)
+{
+
+    Node *root = root1;
+
+    while (root && root->right != NULL)
+    {
+        root = root->right;
+    }
+
+    return root;
+}
+
+Node *Node ::deleteNode(int key, Node *root1)
+{
+    Node *ipre = NULL;
+
+    if (root1 == NULL)
+    {
+        return NULL;
+    }
+
+    else if (root1->data > key)
+    {
+        root1->left = deleteNode(key, root1->left);
+    }
+    else if (root1->data < key)
+    {
+        root1->right = deleteNode(key, root1->right);
+    }
+    else
+    {
+        if (root1->right == NULL && root1->left == NULL)
+        {
+            delete root1;
+            return NULL;
+        }
+        else if (root1->left == NULL && root1->right != NULL)
+        {
+            Node *temp = root1->right;
+            delete root1;
+            return temp;
+        }
+        else if (root1->left != NULL && root1->right == NULL)
+        {
+            Node *temp = root1->left;
+            delete root1;
+            return temp;
+        }
+        ipre = inorderPredecessor(root1->left);
+        root1->data = ipre->data;
+        root1->left = deleteNode(ipre->data, root1->left);
+    }
+    return root1;
+}
 
 void Node ::insert(int key)
 {
     Node *root = this;
     Node *perv = NULL;
 
+    if (root == NULL)
+    {
+        root = createNode(key);
+    }
     while (root)
     {
         perv = root;
@@ -136,20 +201,18 @@ bool Node ::isBST(Node *root)
 void Node ::inOrderTraversal(Node *root)
 {
 
-    if (root == NULL)
-    {
-        return;
-    }
-    else
+    if (root != NULL)
     {
         inOrderTraversal(root->left);
-        cout << root->data;
+        cout << root->data << " ";
         inOrderTraversal(root->right);
     }
 }
 
-void Node ::postorderTraversal(Node *root)
+void Node ::postorderTraversal(Node *root1)
 {
+
+    Node *root = root1;
 
     if (root == NULL)
     {
@@ -163,8 +226,10 @@ void Node ::postorderTraversal(Node *root)
     }
 }
 
-void Node ::preorderTraversal(Node *root)
+void Node ::preorderTraversal(Node *root1)
 {
+
+    Node *root = root1;
 
     if (root == NULL)
     {
@@ -180,13 +245,15 @@ void Node ::preorderTraversal(Node *root)
 
 Node *Node::createNode(int d)
 {
-    Node *p = new Node;
+    Node *p = new Node(d);
     p->data = d;
+    p->right = p->left = NULL;
     return p;
 }
 
-Node::Node()
+Node::Node(int key)
 {
+    this->data = key;
 }
 
 Node::~Node()
@@ -196,35 +263,31 @@ Node::~Node()
 int main()
 {
 
-    Node *p1 = Node::createNode(5);
-    Node *p2 = Node::createNode(3);
-    Node *p3 = Node::createNode(6);
+    Node *p1 = new Node(50);
 
-    p1->left = p2;
-    p1->right = p3;
+    p1->insert(30);
+    p1->insert(20);
+    p1->insert(40);
+    p1->insert(70);
+    p1->insert(60);
+    p1->insert(80);
 
-    Node *p4 = Node::createNode(1);
-    Node *p5 = Node::createNode(4);
+    p1->inOrderTraversal(p1);
+    cout << endl;
 
-    p2->left = p4;
-    p2->right = p5;
+    p1->deleteNode(20, p1);
+    p1->inOrderTraversal(p1);
+    cout << endl;
 
-    Node *grt = Node::iterativeSearch(p1, 1);
+    p1->deleteNode(30, p1);
+    p1->inOrderTraversal(p1);
+    cout << endl;
 
-    // cout << p4 << endl;
-    // cout << grt << endl;
-    
-    p1->insert(12);
-    p1->insert(7);
-    p1->insert(8);
-    p1->insert(0);
+    p1->deleteNode(50, p1);
+    p1->inOrderTraversal(p1);
+    cout << endl;
 
-
-    Node::inOrderTraversal(p1);
-
-
-    delete grt;
-    delete p1;
+       delete p1;
 
     return 0;
 }
