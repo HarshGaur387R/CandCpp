@@ -24,7 +24,18 @@ public:
     void heapify(int arr[], int i, int n);
     void buildHeap(int arr[], int n);
     int *getRoot();
+    void heapSort();
 };
+
+void maxHeap::heapSort()
+{
+
+    for (int i = size; i > 0; i--)
+    {
+        swap(Harr[1], Harr[i]);
+        heapify(Harr, 1, i - 1);
+    }
+}
 
 int *maxHeap::getRoot()
 {
@@ -275,6 +286,9 @@ int main()
 
     ob.printArr();
 
+    ob.heapSort();
+
+    ob.printArr();
     return 0;
 }
 
