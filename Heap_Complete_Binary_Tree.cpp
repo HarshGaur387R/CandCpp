@@ -6,12 +6,13 @@ class maxHeap
 {
 
 private:
-    int *arr = NULL;
+    int *Harr = NULL;
     int size = 0;
     int capasity = 0;
 
 public:
     maxHeap(int capasity);
+    maxHeap(int *ptr, int n, int capsity);
     int leftChild(int parent);
     int rightChild(int parent);
     int getParent(int i);
@@ -20,7 +21,78 @@ public:
     void printArr();
     void deleteN();
     int getSize();
+    void heapify(int arr[], int i, int n);
+    void buildHeap(int arr[], int n);
+    int *getRoot();
 };
+
+int *maxHeap::getRoot()
+{
+
+    return Harr;
+}
+
+maxHeap::maxHeap(int *ptr, int n, int capasity)
+{
+    Harr = new int[capasity];
+    size = n;
+    this->capasity = capasity;
+
+    for (int i = 1; i <= n; i++)
+    {
+        Harr[i] = ptr[i - 1];
+    }
+}
+
+void maxHeap::heapify(int *arr, int i, int n)
+{
+
+    int r = (2 * i) + 1;
+    int l = (2 * i);
+    int largest = i;
+
+    if (l <= n && arr[largest] < arr[l])
+    {
+        largest = l;
+    }
+    if (r <= n && arr[largest] < arr[r])
+    {
+        largest = r;
+    }
+
+    if (largest != i)
+    {
+        swap(arr[i], arr[largest]);
+
+        heapify(arr, largest, n);
+    }
+}
+
+void maxHeap::buildHeap(int arr[], int n)
+{
+
+    for (int i = floor(n / 2); i > 0; i--)
+    {
+        heapify(arr, i, n);
+    }
+}
+
+/*
+        3,5,4,10,6  // Unsorted tree
+
+            (3)
+          /     \
+        (5)     (4)
+       /   \
+    (10)   (6)
+
+
+           (10)
+         /      \
+      (6)       (4)
+     /    \
+   (5)    (3)
+*/
 
 int maxHeap::getSize()
 {
@@ -36,7 +108,7 @@ void maxHeap::printArr()
     }
     for (int i = 1; i <= size; i++)
     {
-        cout << arr[i] << " ";
+        cout << Harr[i] << " ";
     }
     cout << endl;
 }
@@ -51,17 +123,17 @@ void maxHeap ::deleteN()
     }
     else
     {
-        arr[1] = arr[size];
+        Harr[1] = Harr[size];
         size--;
 
         int i = 1, greatV;
 
         while (i <= size)
         {
-            greatV = arr[rightChild(i)] > arr[leftChild(i)] ? rightChild(i) : leftChild(i);
-            if (arr[i] < arr[greatV])
+            greatV = Harr[rightChild(i)] > Harr[leftChild(i)] ? rightChild(i) : leftChild(i);
+            if (Harr[i] < Harr[greatV])
             {
-                swap(arr[i], arr[greatV]);
+                swap(Harr[i], Harr[greatV]);
                 i = greatV;
             }
             else
@@ -85,7 +157,7 @@ void maxHeap ::insert(int key)
         if (size == 0)
         {
             size++;
-            arr[size] = key;
+            Harr[size] = key;
             return; // If the given node is first element so thats a root of the tree.
         }
         else
@@ -93,15 +165,15 @@ void maxHeap ::insert(int key)
             int i = 0;
 
             size++;
-            arr[size] = key;
+            Harr[size] = key;
 
             i = size;
 
             while (i > 1)
             {
-                if (arr[i] > arr[getParent(i)])
+                if (Harr[i] > Harr[getParent(i)])
                 {
-                    swap<int>(arr[i], arr[getParent(i)]);
+                    swap<int>(Harr[i], Harr[getParent(i)]);
 
                     i = getParent(i);
                 }
@@ -117,7 +189,7 @@ void maxHeap ::insert(int key)
 maxHeap ::maxHeap(int capasity)
 {
     this->capasity = capasity;
-    arr = new int[capasity];
+    Harr = new int[capasity];
 }
 
 int maxHeap::getMax()
@@ -180,36 +252,27 @@ int maxHeap ::leftChild(int parent)
     return (2 * parent);
 }
 
+void print(int arr[], int n)
+{
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
 int main()
 {
 
-    maxHeap ob(10);
+    int arr[]{3, 5, 4, 10, 6};
 
-    ob.insert(70);
-    ob.insert(40);
-    ob.insert(50);
-    ob.insert(30);
-    ob.insert(35);
-    ob.insert(60);
+    maxHeap ob(arr, 5, 10);
 
     ob.printArr();
 
-    ob.deleteN();
-    ob.printArr();
+    ob.buildHeap(ob.getRoot(), 5);
 
-    ob.deleteN();
-    ob.printArr();
-
-    ob.deleteN();
-    ob.printArr();
-
-    ob.deleteN();
-    ob.printArr();
-
-    ob.deleteN();
-    ob.printArr();
-
-    ob.deleteN();
     ob.printArr();
 
     return 0;
