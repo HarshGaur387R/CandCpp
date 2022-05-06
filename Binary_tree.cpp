@@ -287,7 +287,7 @@ int main()
     p1->inOrderTraversal(p1);
     cout << endl;
 
-       delete p1;
+    delete p1;
 
     return 0;
 }
