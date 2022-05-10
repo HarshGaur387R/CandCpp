@@ -16,6 +16,7 @@ private:
 public:
     void insert(int val, int priority);
     int peek();
+    void deleteHigh();
     pQueue(int capasity);
     ~pQueue()
     {
@@ -27,6 +28,17 @@ pQueue ::pQueue(int cap)
 {
     pqArr = (pQueue *)malloc(cap * sizeof(pQueue));
     capasity = cap;
+}
+
+void pQueue::deleteHigh()
+{
+
+    int ind = peek();
+
+    for (int k = ind; k <= size; k++)
+    {
+        pqArr[k] = pqArr[k + 1];
+    }
 }
 
 int pQueue ::peek()
@@ -76,7 +88,12 @@ int main()
 
     ob.insert(40, 10);
     ob.insert(20, 20);
+    ob.insert(22, 19);
+    ob.insert(100, 29);
     ob.insert(50, 30);
+
+    cout << ob.peek() << endl;
+    ob.deleteHigh();
 
     cout << ob.peek();
 
