@@ -1,147 +1,181 @@
-#include <iostream>
-#include <cmath>
+#include <bits/stdc++.h>
 using namespace std;
 
-class node
+// An AVL tree node
+class Node
 {
 public:
-    int key = 0;
-    node *left = NULL;
-    node *right = NULL;
-    int height = 1;
+    int key;
+    Node *left;
+    Node *right;
+    int height;
 };
 
-int getheight(node *n)
+// A utility function to get maximum
+// of two integers
+int max(int a, int b);
+
+// A utility function to get the
+// height of the tree
+int height(Node *N)
 {
-    if (n == NULL)
-    {
+    if (N == NULL)
         return 0;
-    }
-    else
-    {
-        return n->height;
-    }
+    return N->height;
 }
 
-node *createNode(int k)
+// A utility function to get maximum
+// of two integers
+int max(int a, int b)
 {
-    node *newNode = new node;
-    newNode->key = k;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    newNode->height = 1;
-    return newNode;
+    return (a > b) ? a : b;
 }
 
-int getBalanceFactor(node *n)
+/* Helper function that allocates a
+   new node with the given key and
+   NULL left and right pointers. */
+Node *newNode(int key)
 {
-    if (n == NULL)
-        return 0;
-
-    return getheight(n->left) - getheight(n->right);
+    Node *node = new Node();
+    node->key = key;
+    node->left = NULL;
+    node->right = NULL;
+    node->height = 1; // new node is initially
+                      // added at leaf
+    return (node);
 }
 
-node *rightRotate(node *y)
+// A utility function to right
+// rotate subtree rooted with y
+// See the diagram given above.
+Node *rightRotate(Node *y)
 {
-    node *x = y->left;
-    node *T2 = x->right;
+    Node *x = y->left;
+    Node *T2 = x->right;
 
+    // Perform rotation
     x->right = y;
     y->left = T2;
 
-    x->height = max(getheight(x->left), getheight(x->right)) + 1;
-    y->height = max(getheight(y->left), getheight(y->right)) + 1;
+    // Update heights
+    y->height = max(height(y->left),
+                    height(y->right)) +
+                1;
+    x->height = max(height(x->left),
+                    height(x->right)) +
+                1;
 
+    // Return new root
     return x;
 }
 
-node *leftRotate(node *x)
+// A utility function to left
+// rotate subtree rooted with x
+// See the diagram given above.
+Node *leftRotate(Node *x)
 {
-    node *y = x->right;
-    node *T2 = y->left;
+    Node *y = x->right;
+    Node *T2 = y->left;
 
+    // Perform rotation
     y->left = x;
     x->right = T2;
 
-    x->height = max(getheight(x->left), getheight(x->right)) + 1;
-    y->height = max(getheight(y->left), getheight(y->right)) + 1;
+    // Update heights
+    x->height = max(height(x->left),
+                    height(x->right)) +
+                1;
+    y->height = max(height(y->left),
+                    height(y->right)) +
+                1;
 
+    // Return new root
     return y;
 }
 
-node *insert(node *n, int k)
+// Get Balance factor of node N
+int getBalance(Node *N)
 {
-    if (n == NULL)
-    {
-        return (createNode(k));
-    }
-
-    if (k < n->key)
-    {
-        n->left = insert(n->left, k);
-    }
-    else if (k > n->key)
-    {
-        n->right = insert(n->right, k);
-        return n;
-    }
-
-    n->height = max(getheight(n->left), getheight(n->right)) + 1;
-    int bf = getBalanceFactor(n);
-
-    // LEFT LEFT CASE
-
-    if (bf > 1 && k < n->left->key)
-    {
-        return rightRotate(n);
-    }
-
-    // RIGHT RIGHT CASE
-
-    if (bf < -1 && k > n->right->key)
-    {
-        return leftRotate(n);
-    }
-
-    // LEFT RIGHT CASE
-
-    if (bf > 1 && k > n->left->key)
-    {
-        n->left = leftRotate(n->left);
-        return rightRotate(n);
-    }
-
-    // RIGHT LEFT CASE
-
-    if (bf < -1 && k < n->right->key)
-    {
-        n->left = rightRotate(n->right);
-        return leftRotate(n);
-    }
-
-    return n;
+    if (N == NULL)
+        return 0;
+    return height(N->left) - height(N->right);
 }
 
-void preOrder(node *root1)
+// Recursive function to insert a key
+// in the subtree rooted with node and
+// returns the new root of the subtree.
+Node *insert(Node *node, int key)
 {
+    /* 1. Perform the normal BST insertion */
+    if (node == NULL)
+        return (newNode(key));
 
-    node *root = root1;
+    if (key < node->key)
+        node->left = insert(node->left, key);
+    else if (key > node->key)
+        node->right = insert(node->right, key);
+    else // Equal keys are not allowed in BST
+        return node;
 
-    if (root == NULL)
+    /* 2. Update height of this ancestor node */
+    node->height = 1 + max(height(node->left),
+                           height(node->right));
+
+    /* 3. Get the balance factor of this ancestor
+        node to check whether this node became
+        unbalanced */
+    int balance = getBalance(node);
+
+    // If this node becomes unbalanced, then
+    // there are 4 cases
+
+    // Left Left Case
+    if (balance > 1 && key < node->left->key)
+        return rightRotate(node);
+
+    // Right Right Case
+    if (balance < -1 && key > node->right->key)
+        return leftRotate(node);
+
+    // Left Right Case
+    if (balance > 1 && key > node->left->key)
     {
-        return;
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
     }
-    else
+
+    // Right Left Case
+    if (balance < -1 && key < node->right->key)
     {
-        cout << root->key;
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
+
+    /* return the (unchanged) node pointer */
+    return node;
+}
+
+// A utility function to print preorder
+// traversal of the tree.
+// The function also prints height
+// of every node
+void preOrder(Node *root)
+{
+    if (root != NULL)
+    {
+        cout << root->key << " ";
         preOrder(root->left);
         preOrder(root->right);
     }
 }
+
+// Driver Code
 int main()
 {
-    node *root = NULL;
+    Node *root = NULL;
 
+    /* Constructing tree given in
+    the above figure */
     root = insert(root, 10);
     root = insert(root, 20);
     root = insert(root, 30);
@@ -149,9 +183,17 @@ int main()
     root = insert(root, 50);
     root = insert(root, 25);
 
+    /* The constructed AVL Tree would be
+                30
+            / \
+            20 40
+            / \ \
+        10 25 50
+    */
+    cout << "Preorder traversal of the "
+            "constructed AVL tree is \n";
     preOrder(root);
 
-    delete root;
     return 0;
 }
 
